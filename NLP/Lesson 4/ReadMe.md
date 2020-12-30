@@ -1,6 +1,6 @@
 # Занятие 4
 ## Углубление в рекуррентные сети
-* Ноутбук урока: https://colab.research.google.com/drive/1DsqscPd2OsqbRWalLj53Jm7ZTpM3iXeb?usp=sharing
+* Ноутбук урока: https://colab.research.google.com/drive/1-poWb1quHe9pKdSgsZZF7J8Bhlo7YvfL?usp=sharing
 * Презентация: https://drive.google.com/file/d/1EzesZR1LWhWiJQQQZap8XMnCqnAwb0UR/view?usp=sharing
 * База: https://drive.google.com/open?id=1aK6IRf2UXQ7wMf-lpbe4_Psx6VdTZ8gX
 * Записи урока: https://drive.google.com/drive/folders/1u1s6O4klNJfbGty96MkSuxE91swYnWgj?usp=sharing
