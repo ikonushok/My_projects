@@ -12,17 +12,17 @@
 
 Ноутбук: Разбор_HW4_UltraLight_Углубление_в_RNN.ipynb
 
-Разбор: 
+Разбор: https://colab.research.google.com/drive/1-poWb1quHe9pKdSgsZZF7J8Bhlo7YvfL?usp=sharing
 
 
 ### Задания уровня light:
 1.	Выполнить задание ultra-light
-2.  Реализовать режимы(return_states, return_sequences итд) работы одной из 3 RNN с помощью модификации класса, разобранного на уроке
+2.  Реализовать режимы(return_states, return_sequences итд) работы одной из 3х RNN
 3.  Написать выводы
 
 Ноутбук: Разбор_HW4_Light_Углубление_в_RNN.ipynb
 
-Разбор: 
+Разбор: https://drive.google.com/file/d/1ucQYe2K2IlQJ1ZvuyfT7ZJ74kjPB-Ov_/view?usp=sharing
 
 
 ### Задания уровня pro:
