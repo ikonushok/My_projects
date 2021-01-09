@@ -12,7 +12,7 @@
 
 Ноутбук: Разбор_HW4_UltraLight_Углубление_в_RNN.ipynb
 
-Разбор: https://colab.research.google.com/drive/1-poWb1quHe9pKdSgsZZF7J8Bhlo7YvfL?usp=sharing
+Разбор: https://drive.google.com/file/d/1dUCbSB2Y7PFklalGQTvyQaXGhlN2uUw8/view?usp=sharing
 
 
 ### Задания уровня light:
@@ -32,7 +32,7 @@
 
 Ноутбук: Разбор_HW4_Pro_Углубление_в_RNN.ipynb
 
-Разбор: 
+Разбор: https://drive.google.com/file/d/10RSCb-iEK4TTEmxWY99KEim46XWB-K7A/view?usp=sharing
 
 
 ### Задания уровня ultra-pro:
@@ -40,8 +40,11 @@
 
 Ноутбук: Разбор_HW4_UltraPro_Углубление_в_RNN.ipynb
 
-Разбор: 
+Разбор: https://drive.google.com/file/d/1plILn8LwjG8t4r3Is4ieTEHbOe0cSFDb/view?usp=sharing
 
 ----
 ### Рекомендуемая литература:
 [Как понять LSTM сети](https://alexsosn.github.io/ml/2015/11/17/LSTM.html)
+Статьи по NER:
+https://sysblok.ru/glossary/named-entity-recognition-ner/
+https://habr.com/ru/company/abbyy/blog/449514/
