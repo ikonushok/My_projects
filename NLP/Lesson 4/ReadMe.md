@@ -2,7 +2,7 @@
 ## Углубление в рекуррентные сети
 * Ноутбук урока: https://colab.research.google.com/drive/1-poWb1quHe9pKdSgsZZF7J8Bhlo7YvfL?usp=sharing
 * Презентация: https://drive.google.com/file/d/1EzesZR1LWhWiJQQQZap8XMnCqnAwb0UR/view?usp=sharing
-* База: https://drive.google.com/open?id=1aK6IRf2UXQ7wMf-lpbe4_Psx6VdTZ8gX
+* База: https://drive.google.com/drive/folders/1Zk0ZlvSZaQQC6Td4m2VsR1wKHFu2DmRB?usp=sharing
 * Записи урока: https://drive.google.com/drive/folders/1u1s6O4klNJfbGty96MkSuxE91swYnWgj?usp=sharing
 
 
