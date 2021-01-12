@@ -14,6 +14,6 @@
 
 [Тут Отчет о проделанной работе](Логика Palm Oil.pdf)
 А вот тут, созданные ноутбуки:
-1. [Анализ и подготовка данных](Palm_oil_data_preparing.ipynb)
-2. [Создание и обучение Нейронной сети](Palm_oil_Neural_Net.ipynb)
-3. [Предикт](Palm_oil_prediction.ipynb)
+1. [Анализ и подготовка данных](notebooks/Palm_oil_data_preparing.ipynb)
+2. [Создание и обучение Нейронной сети](notebooks/Palm_oil_Neural_Net.ipynb)
+3. [Предикт](notebooks/Palm_oil_prediction.ipynb)
