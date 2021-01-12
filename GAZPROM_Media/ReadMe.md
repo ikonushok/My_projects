@@ -6,4 +6,4 @@
 
 [Тут код Нейронной сети, распознающей трек](GAZPROM_Media/GAZP_Media_Hacaton_v3.ipynb)
 
-[Тут Презентация Проекта](GAZPROM_Media/Кейс Газпромедиа.pdf)
+[Тут Презентация Проекта](GAZPROM_Media/Кейс_Газпромедиа.pdf)
