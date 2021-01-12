@@ -12,7 +12,7 @@
 5. Проверка на val-выборке
 6. Доработка сетки, ансамблей и features engineering при необходимости
 
-[Тут Отчет о проделанной работе](Логика Palm Oil.pdf)
+[Тут Отчет о проделанной работе](Report_Palm_Oil.pdf)
 А вот тут, созданные ноутбуки:
 1. [Анализ и подготовка данных](notebooks/Palm_oil_data_preparing.ipynb)
 2. [Создание и обучение Нейронной сети](notebooks/Palm_oil_Neural_Net.ipynb)
