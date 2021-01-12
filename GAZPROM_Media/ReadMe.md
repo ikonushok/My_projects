@@ -10,4 +10,4 @@
 
 -----
 
-Наш [алгоритм](GAZPROM_Media/pictures/model_GAZP_media.h5.png) опередил Shazam по скорости распознавания трека
+Наш [алгоритм](pictures/model_GAZP_media.h5.png) опередил Shazam по скорости распознавания трека
