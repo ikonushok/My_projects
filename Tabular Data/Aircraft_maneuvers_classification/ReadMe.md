@@ -1,11 +1,11 @@
 # Verification of several ways to solve the problem of classification of aircraft maneuvers
 ___
 ## Methods:
-1. Clusterization by TimeSeriesKMeans_cluster_analisys: `data_analysis.py`
+1. Clusterization by TimeSeriesKMeans_cluster_analisys: `clusterization.py`
 2. Clusterization: `dynamic_time_warping.py`
 3. Neural Networks: 
    1. [Siamese Neural Network](https://towardsdatascience.com/how-to-train-your-siamese-neural-network-4c6da3259463)
-   2. [my GAZPROM_Media_Hacaton](https://github.com/ikonushok/My_projects/tree/main/Sound)
+   2. [Music Track Classification](https://github.com/ikonushok/My_projects/tree/main/Sound)
 ___
 ## Classes:
 -1- not labeled/undefined
