@@ -124,6 +124,7 @@ def TimeSeriesKMeans_cluster_analisys(df, range_n_clusters, params, save_stat=Fa
             fontsize=14,
             fontweight="bold",
         )
+        plt.savefig(f'outputs/Silhouette analysis for TimeSeriesKMeans for {n_clusters} clusters.png')
         plt.show()
 
         df['Groups'] = cluster_labels

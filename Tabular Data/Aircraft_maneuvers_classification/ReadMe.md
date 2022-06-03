@@ -1,8 +1,8 @@
 # Verification of several ways to solve the problem of classification of aircraft maneuvers
 ___
 ## Methods:
-1. Clusterization by TimeSeriesKMeans_cluster_analisys: `clusterization.py`
-2. Clusterization: `dynamic_time_warping.py`
+1. Clusterization by TimeSeriesKMeans_cluster_analisys: [clusterization.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/clusterization.py)
+2. Clusterization by Dynamic Time Warping algorithm: [dynamic_time_warping.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/dynamic_time_warping.py)
 3. Neural Networks: 
    1. [Siamese Neural Network](https://towardsdatascience.com/how-to-train-your-siamese-neural-network-4c6da3259463)
    2. [Music Track Classification](https://github.com/ikonushok/My_projects/tree/main/Sound)
