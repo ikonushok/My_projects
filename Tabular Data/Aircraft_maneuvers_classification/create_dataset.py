@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 from sklearn.model_selection import train_test_split
 
-from Aircraft_maneuvers_classification.constants import path_outputs, source_root
+from constants import path_outputs, source_root
 from utilits.create_dataset_functions import make_transformations, split_sequence, read_data
 
 warnings.filterwarnings("ignore")

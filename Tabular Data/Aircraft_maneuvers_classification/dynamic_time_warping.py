@@ -6,7 +6,7 @@ import warnings
 import seaborn as sns
 from dtw import dtw
 
-from Aircraft_maneuvers_classification.constants import source_root
+from constants import source_root, path_outputs
 from utilits.create_dataset_functions import distance_calculation
 
 warnings.filterwarnings("ignore")
@@ -41,15 +41,18 @@ plt.figure(figsize=(16, 4))
 plt.plot(df_distances)
 plt.title(f'Dynamic_Time_Warping of {source_file}')
 plt.legend(labels)
+plt.savefig(f'{path_outputs}/Dynamic_Time_Warping of {source_file}.png')
 plt.show()
 
 plt.figure(figsize=(16, 4))
 plt.plot(df_distances.diff())
 plt.title(f'Dynamic_Time_Warping of {source_file}')
 plt.legend(labels)
+plt.savefig(f'{path_outputs}/Diff_Dynamic_Time_Warping of {source_file}.png')
 plt.show()
 
 sns.heatmap(df_distances.diff().corr())
+plt.savefig(f'{path_outputs}/Heatmap_of_Dynamic_Time_Warping of {source_file}.png')
 plt.show()
 
 print(f'\n{"=" * 90}\n'

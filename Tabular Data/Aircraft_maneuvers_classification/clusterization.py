@@ -1,6 +1,6 @@
 import warnings
 
-from Aircraft_maneuvers_classification.constants import source_root
+from constants import source_root
 
 warnings.filterwarnings("ignore")
 
@@ -11,8 +11,6 @@ pd.set_option("precision", 2)
 
 from sklearn.model_selection import train_test_split
 from utilits.create_dataset_functions import TimeSeriesKMeans_cluster_analisys, make_transformations
-
-
 
 
 source_file = 'IMU_2022_05_14_18_13_42.csv'

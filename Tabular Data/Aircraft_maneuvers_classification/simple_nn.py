@@ -17,8 +17,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from tqdm import trange
 
-from Aircraft_maneuvers_classification.constants import source_root, path_outputs
-from Aircraft_maneuvers_classification.utilits.create_dataset_functions import read_data
+from constants import source_root, path_outputs
+from utilits.create_dataset_functions import read_data
 
 
 # сделаем так, чтобы tf не резервировал под себя сразу всю память

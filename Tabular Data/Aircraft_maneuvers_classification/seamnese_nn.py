@@ -12,11 +12,10 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import CSVLogger, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 
-from Aircraft_maneuvers_classification.utilits.model_dense import create_embedding_model, create_SNN
-from Aircraft_maneuvers_classification.utilits.functions_for_seamnese_nn import \
-    plot_triplets, create_batch, create_hard_batch, evaluate,\
-    data_generator, generate_prototypes, n_way_accuracy_prototypes, visualise_n_way_prototypes
-from Aircraft_maneuvers_classification.constants import path_outputs
+from constants import path_outputs
+from utilits.model_dense import create_embedding_model, create_SNN
+from utilits.functions_for_seamnese_nn import (plot_triplets, create_batch, create_hard_batch, evaluate,
+    data_generator, generate_prototypes, n_way_accuracy_prototypes, visualise_n_way_prototypes)
 
 warnings.filterwarnings('ignore')
 
