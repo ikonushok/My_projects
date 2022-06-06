@@ -3,9 +3,10 @@ ___
 ## Methods:
 1. Clusterization by TimeSeriesKMeans_cluster_analisys: [clusterization.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/clusterization.py)
 2. Clusterization by Dynamic Time Warping algorithm: [dynamic_time_warping.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/dynamic_time_warping.py)
-3. Neural Networks: 
-   1. [seamnese_nn.py]() original from [Siamese Neural Network](https://towardsdatascience.com/how-to-train-your-siamese-neural-network-4c6da3259463)
-   2. [simple_nn.py]()
+then we can solve the problem with Classic ML
+3. Here we have two types of Neural Networks: 
+   1. [seamnese_nn.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/seamnese_nn.py) original from [Siamese Neural Network](https://towardsdatascience.com/how-to-train-your-siamese-neural-network-4c6da3259463)
+   2. [simple_nn.py](https://github.com/ikonushok/My_projects/blob/main/Tabular%20Data/Aircraft_maneuvers_classification/simple_nn.py)
 ___
 ## Classes:
 -1- not labeled/undefined
