@@ -12,10 +12,11 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import CSVLogger, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 
-from Siamese_Neural_Network.utilits.model_dense import create_embedding_model, create_SNN
-from Siamese_Neural_Network.utilits.functions import \
+from Aircraft_maneuvers_classification.utilits.model_dense import create_embedding_model, create_SNN
+from Aircraft_maneuvers_classification.utilits.functions_for_seamnese_nn import \
     plot_triplets, create_batch, create_hard_batch, evaluate,\
     data_generator, generate_prototypes, n_way_accuracy_prototypes, visualise_n_way_prototypes
+from Aircraft_maneuvers_classification.constants import path_outputs
 
 warnings.filterwarnings('ignore')
 
@@ -151,8 +152,7 @@ num_gpus = 1
 snn = siamese_net
 batch_per_gpu = int(batch_size / num_gpus)
 
-snn.compile(loss=triplet_loss,
-            optimizer=optimiser_obj)
+snn.compile(loss=triplet_loss, optimizer=optimiser_obj)
 
 history = snn.fit(
     data_generator(network, x_train, y_train, x_test, y_test, x_train_w_h,
@@ -170,6 +170,7 @@ plt.plot(history.history['val_loss'], label='val_loss')
 plt.legend()
 plt.title(f'bs={batch_size}, emb_size={emb_size}, lr={lr}, alpha={alpha}')
 plt.grid()
+plt.savefig(f'{path_outputs}/history_bs_{batch_size}_emb_size_{emb_size}_lr_{lr}_alpha_{alpha}.png')
 plt.show()
 
 print(f"{'-' * 90}\nTraining complete.")
@@ -220,6 +221,8 @@ for label in test_class_labels:
     plt.title('Embedding Locations After %d Training Epochs' % epochs)
     plt.legend()
 
+plt.savefig(f'{path_outputs}/Embedding_Locations_After_{epochs}_Training Epochs'
+            f'_bs_{batch_size}_emb_size_{emb_size}_lr_{lr}_alpha_{alpha}.png')
 plt.show()
 
 
@@ -258,4 +261,6 @@ for label in labels:
     ax[1].set_title("Support Set (Img of same class shown first)")
     ax[2].imshow(np.reshape(sample_imgs[min_index], (x_train_w, x_train_h)), vmin=0, vmax=1, cmap='Greys')
     ax[2].set_title("Image most similar\nto Test Image in Support Set")
+    plt.savefig(f'{path_outputs}/Test_Images_for_label_{label}_after_{epochs}_Training Epochs'
+                f'_bs_{batch_size}_emb_size_{emb_size}_lr={lr}_alpha_{alpha}.png')
     plt.show()

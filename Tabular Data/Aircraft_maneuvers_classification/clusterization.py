@@ -1,4 +1,7 @@
 import warnings
+
+from Aircraft_maneuvers_classification.constants import source_root
+
 warnings.filterwarnings("ignore")
 
 import pandas as pd
@@ -7,11 +10,11 @@ pd.set_option("expand_frame_repr", False)
 pd.set_option("precision", 2)
 
 from sklearn.model_selection import train_test_split
-from functions import TimeSeriesKMeans_cluster_analisys, make_transformations
+from utilits.create_dataset_functions import TimeSeriesKMeans_cluster_analisys, make_transformations
 
 
 
-source_root = 'source_root'
+
 source_file = 'IMU_2022_05_14_18_13_42.csv'
 df = pd.read_csv(f'{source_root}/{source_file}')
 del df['Timestamp[nanosec]']

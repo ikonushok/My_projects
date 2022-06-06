@@ -6,7 +6,8 @@ import warnings
 import seaborn as sns
 from dtw import dtw
 
-from functions import distance_calculation
+from Aircraft_maneuvers_classification.constants import source_root
+from utilits.create_dataset_functions import distance_calculation
 
 warnings.filterwarnings("ignore")
 pd.pandas.set_option('display.max_columns', None)
@@ -16,7 +17,6 @@ pd.set_option("precision", 2)
 # ===================================================================
 # Скачаем данные
 # ===================================================================
-source_root = 'source_root'
 source_file = 'IMU_2022_05_14_18_13_42.csv'
 df = pd.read_csv(f'{source_root}/{source_file}')
 del df['Timestamp[nanosec]']
