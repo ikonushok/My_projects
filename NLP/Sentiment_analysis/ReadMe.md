@@ -1,4 +1,10 @@
-# [Sentiment Analysis with variable length sequences in Torch](https://medium.com/@sonicboom8/sentiment-analysis-with-variable-length-sequences-in-pytorch-6241635ae130)
+[Sentiment Analysis with variable length sequences in Torch](https://medium.com/@sonicboom8/sentiment-analysis-with-variable-length-sequences-in-pytorch-6241635ae130)
+
+[Sentiment Analysis with Variable length sequences in Pytorch](https://medium.com/@sonicboom8/sentiment-analysis-with-variable-length-sequences-in-pytorch-6241635ae130)
+
+[BERT Text Classification Using Pytorch](https://towardsdatascience.com/bert-text-classification-using-pytorch-723dfb8b6b5b)
+
+# [Code Review: Sentiment Recurrent Neural Networks with PyTorch](https://tracyrenee61.medium.com/code-review-sentiment-recurrent-neural-networks-with-pytorch-fbf5c9624711)
 
 1. Process Data through pytorch Dataset 
 - Tokenize tweets

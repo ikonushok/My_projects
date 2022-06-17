@@ -3,10 +3,13 @@ import re
 import warnings
 from collections import Counter
 
+import numpy as np
 import pandas as pd
-import spacy
+from string import punctuation
 
 import torch
+import seaborn as sns
+from matplotlib import pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 
 from sklearn.model_selection import train_test_split
@@ -28,6 +31,7 @@ filename = 'dataset.csv'
 # df = pd.read_csv(data_root / 'Sentiment Analysis Dataset.csv', error_bad_lines=False)
 df = pd.read_csv(f'{source_root}/{filename}', delimiter=';')
 df = df[['Sentiment', 'SentimentText']]
+# df = df.query("Sentiment != 1")
 print(df)
 print(type(df.SentimentText))
 print(f'\nУникальных значений:\n{df.nunique()}')
@@ -38,78 +42,23 @@ train_df, val_df = train_df.reset_index(drop=True), val_df.reset_index(drop=True
 
 print(f'train_df: {train_df.shape},\tval_df: {val_df.shape}')
 
-PAD = 0
-UNK = 1
+fig = plt.figure(figsize=(8,5))
+ax = sns.barplot(x=df.Sentiment.unique(),y=df.Sentiment.value_counts());
+ax.set(xlabel='Labels')
+plt.show()
 
 
-class SentimentDataset(Dataset):
-    """Define the pytorch Dataset to process the tweets
-       This class can be used for both training and validation dataset
-       Run it for training data and pass the word2idx and idx2word when running
-       for validation data
-    """
+# Сохраним метки в виде списков
+values = df.Sentiment.values.tolist()
+print('value[0] =', values[0])
+reviews = df.SentimentText.values.tolist()
+reviews = ''.join(str(reviews))
+reviews = reviews.lower()
+print(reviews[:60], type(reviews), len(reviews))
 
-    def __init__(self, df, word2idx=None, idx2word=None, max_vocab_size=50000):
-        print('Processing Data')
-        self.df = df
-        print('Removing white space...')
-        self.df.SentimentText = self.df.SentimentText.progress_apply(lambda x: str(x).strip())
-        self.nlp = spacy.load('en', disable=['parser', 'tagger', 'ner'])
-        if word2idx is None:
-            print('Building Counter...')
-            word_counter = self.build_counter()
-            print('Building Vocab...')
-            self.word2idx, self.idx2word = self.build_vocab(word_counter, max_vocab_size)
-        else:
-            self.word2idx, self.idx2word = word2idx, idx2word
-        print('*' * 100)
-        print('Dataset info:')
-        print(f'Number of Tweets: {self.df.shape[0]}')
-        print(f'Vocab Size: {len(self.word2idx)}')
-        print('*' * 100)
-
-    def __len__(self):
-        return self.df.shape[0]
-
-    def __getitem__(self, idx):
-        sent = self.df.SentimentText[idx]
-        tokens = [w.text.lower() for w in self.nlp(self.tweet_clean(sent))]
-        vec = self.vectorize(tokens, self.word2idx)
-        return vec, self.df.Sentiment[idx]
-
-    def tweet_clean(self, text):
-        """Very basic text cleaning. This function can be built upon for
-           better preprocessing
-        """
-        text = re.sub(r'[\s]+', ' ', text)  # replace multiple white spaces with single space
-        #         text = re.sub(r'@[A-Za-z0-9]+', ' ', text) # remove @ mentions
-        text = re.sub(r'https?:/\/\S+', ' ', text)  # remove links
-        text = re.sub(r'[^A-Za-z0-9]+', ' ', text)  # remove non alphanumeric character
-        return text.strip()
-
-    def build_counter(self):
-        """Tokenize the tweets using spacy and build vocabulary
-        """
-        words_counter = Counter()
-        for sent in tqdm(self.df.SentimentText.values):
-            words_counter.update(w.text.lower() for w in self.nlp(self.tweet_clean(sent)))
-        return words_counter
-
-    def build_vocab(self, words_counter, max_vocab_size):
-        """Add pad and unk tokens and build word2idx and idx2word dictionaries
-        """
-        word2idx = {'<PAD>': PAD, '<UNK>': UNK}
-        word2idx.update(
-            {word: i + 2 for i, (word, count) in tqdm(enumerate(words_counter.most_common(max_vocab_size)))})
-        idx2word = {idx: word for word, idx in tqdm(word2idx.items())}
-        return word2idx, idx2word
-
-    def vectorize(self, tokens, word2idx):
-        """Convert tweet to vector
-        """
-        vec = [word2idx.get(token, UNK) for token in tokens]
-        return vec
+all_text = re.sub(r'[^\w\s]','', reviews)
+print(all_text[:60], type(all_text), len(all_text))
+words = all_text.split()
+print(words[:10])
 
 
-vocab_size = 100000
-train_ds = SentimentDataset(train_df, max_vocab_size=vocab_size)
