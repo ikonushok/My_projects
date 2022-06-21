@@ -8,9 +8,8 @@ import pandas as pd
 from string import punctuation
 
 import torch
-import seaborn as sns
 from matplotlib import pyplot as plt
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import TensorDataset, DataLoader
 
 from sklearn.model_selection import train_test_split
 from tqdm.auto import tqdm, trange
@@ -35,12 +34,6 @@ df = df[['Sentiment', 'SentimentText']]
 print(df)
 print(type(df.SentimentText))
 print(f'\nУникальных значений:\n{df.nunique()}')
-
-# split the data into train and validation
-train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[['Sentiment']])
-train_df, val_df = train_df.reset_index(drop=True), val_df.reset_index(drop=True)
-
-print(f'train_df: {train_df.shape},\tval_df: {val_df.shape}')
 
 # fig = plt.figure(figsize=(8,5))
 # ax = sns.barplot(x=df.Sentiment.unique(),y=df.Sentiment.value_counts());
@@ -76,7 +69,7 @@ print(f'74 Unique words:\t{vocab[:20]}\t{len(vocab_to_int)}')
 reviews_ints = []
 for review in review_split:
     reviews_ints.append([vocab_to_int[word] for word in review.split()])
-print(f'80 Tokenized words:\t{reviews_ints[0][:20]}\t{len(reviews_ints[0])}')
+print(f'80 Tokenized words (reviews_ints):\t{reviews_ints[0][:20]}\t{len(reviews_ints[0])}')
 
 # MAKE ALL REVIEWS SAME LENGTH
 ## outlier review stats
@@ -85,44 +78,60 @@ print(f'{rewiew_lens[0]} - {max(rewiew_lens)}')
 plt.hist(rewiew_lens)
 plt.title('Распределение топиков по длине (число слов)')
 plt.show()
+print('Number of reviews before removing outliers:', len(reviews_ints))
+non_zero_idx = [ii for ii, review in enumerate(reviews_ints) if len(review) != 0]
+print(f'К удалению: {non_zero_idx[0]}')
+reviews_ints = [reviews[ii] for ii in non_zero_idx]
+encoded_labels = np.array([labels[ii] for ii in non_zero_idx])
+print('Number of reviews sater removing outliers:', len(reviews_ints))
 
 
-def pad_text(encoded_reviews, seq_length):
-    reviews = []
-    for review in encoded_reviews:
-        if len(review) >= seq_length:
-            reviews.append(review[:seq_length])
-        else:
-            reviews.append([0] * (seq_length - len(review)) + review)
-    return np.array(reviews)
+def pad_features(reviews_ints, seq_length):
+    features = np.zeros((len(reviews_ints), seq_length), dtype=int)
 
-encoded_reviews = [[vocab_to_int.get(word) for word in review.split()] for review in reviews]
-encoded_labels = np.array( [label for idx, label in enumerate(labels) if len(encoded_reviews[idx]) > 0] )
-encoded_reviews = [review for review in encoded_reviews if len(review) > 0]
-padded_reviews = pad_text(encoded_reviews, seq_length=200)
+    for i, row in enumerate(reviews_ints):
+        features[i, -len(row):] = np.array(row)[:seq_length]
+    return features
+
+seq_lenght = 200
+# encoded_reviews = [[vocab_to_int.get(word) for word in review.split()] for review in reviews]
+# encoded_labels = np.array( [label for idx, label in enumerate(labels) if len(encoded_reviews[idx]) > 0] )
+# encoded_reviews = [review for review in encoded_reviews if len(review) > 0]
+features = pad_features(reviews_ints, seq_length=seq_lenght)
+assert len(features) == len(reviews_ints), 'Your features should have as many rows as reviews'
+assert len(features[0] == seq_lenght), 'Each feature row should contain seq_lenght values'
 print('\nПосмотрим на образцы закодированных топиков:')
-print(padded_reviews[0], reviews[0])
-print(padded_reviews[1], reviews[1])
+
+print(features, features.shape, len(features), reviews[0])
 
 
 # SPLIT DATA & GET (REVIEW, LABEL) DATALOADER
-train_ratio = 0.8
-valid_ratio = (1 - train_ratio)/2
-total = padded_reviews.shape[0]
-train_cutoff = int(total * train_ratio)
-valid_cutoff = int(total * (1 - valid_ratio))
+split_frac = 0.8
 
-train_x, train_y = padded_reviews[:train_cutoff], encoded_labels[:train_cutoff]
-valid_x, valid_y = padded_reviews[:train_cutoff : valid_cutoff], encoded_labels[train_cutoff : valid_cutoff]
-test_x, test_y = padded_reviews[valid_cutoff:], encoded_labels[valid_cutoff:]
+## split data into train, val, test
+split_idx = int(len(features)*split_frac)
+train_x, remaining_x = features[:split_idx], features[split_idx:]
+train_y, remaining_y = labels[:split_idx], labels[split_idx:]
 
-from torch.utils.data import TensorDataset, DataLoader
+test_idx = int(len(remaining_x)*0.5)
+val_x, test_x = features[:test_idx], features[test_idx:]
+val_y, test_y = labels[:test_idx], labels[test_idx:]
 
-train_data = TensorDataset(train_x, train_y)
-valid_data = TensorDataset(valid_x, valid_y)
+
+print(f'\n'
+      f'train_x: {train_x.shape}\ttrain_y: {len(train_y)}\t{type(train_x)}, {type(train_y)}\n'
+      f'val_x: {val_x.shape}\ttrain_y: {len(val_y)}\n'
+      f'test_x: {test_x.shape}\ttest_y: {len(test_y)}\n')
+
+train_data = TensorDataset(torch.from_numpy(train_x), torch.from_numpy(train_y))
+valid_data = TensorDataset(val_x, val_y)
 test_data = TensorDataset(test_x, test_y)
 
 batch_size = 50
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+print(f'\n'
+      f'train_x:\t{train_x.shape}\ttrain_y:\t{train_y.shape}\n'
+      f'valid_x:\t{val_x.shape}\ttrain_y:\t{val_y.shape}\n'
+      f'test_x:\t{test_x.shape}\ttest_y:\t{test_y.shape}\n')
