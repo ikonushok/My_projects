@@ -1,11 +1,12 @@
+import os
+import random
+
 import numpy as np
 import torch
 from tqdm import tqdm, trange
 from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import Dataset, DataLoader
 from transformers import AdamW, get_linear_schedule_with_warmup
-
-# from bert_dataset import CustomDataset
 
 
 class CustomDataset(Dataset):
@@ -43,6 +44,13 @@ class CustomDataset(Dataset):
 
 
 class BertClassifier:
+
+    os.environ['PYTHONHASHSEED'] = str(42)
+    random.seed(42)
+    np.random.seed(42)
+    torch.manual_seed(42)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
     def __init__(self, model_path, tokenizer_path, n_classes=2, epochs=1, model_save_path='models/bert.pt'):
         self.model = BertForSequenceClassification.from_pretrained(model_path)
