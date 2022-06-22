@@ -7,6 +7,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import torch
+from matplotlib import pyplot as plt
 from sklearn.metrics import precision_recall_fscore_support
 
 from utilits.bert_classifier import BertClassifier
@@ -30,10 +31,18 @@ test_data = pd.read_csv(f'outputs/test.csv')
 
 # Initialize BERT classifier
 classifier = BertClassifier(
-        model_path='cointegrated/rubert-tiny',
-        tokenizer_path='cointegrated/rubert-tiny',
+
+        # model_path='cointegrated/rubert-tiny',
+        # tokenizer_path='cointegrated/rubert-tiny',
+
+        model_path='cointegrated/rubert-tiny2-sentence-compression',
+        tokenizer_path='cointegrated/rubert-tiny2-sentence-compression',
+
+        # model_path='cointegrated/rubert-tiny-toxicity',  # model fine-tuned for classification of toxicity and inappropriateness for short informal Russian texts, such as comments in social networks
+        # tokenizer_path='cointegrated/rubert-tiny-toxicity',
+
         n_classes=2,
-        epochs=5,
+        epochs=10,
         model_save_path='models/bert.pt'
 )
 

@@ -3,6 +3,7 @@ import random
 
 import numpy as np
 import torch
+from matplotlib import pyplot as plt
 from tqdm import tqdm, trange
 from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import Dataset, DataLoader
@@ -86,7 +87,7 @@ class BertClassifier:
         losses = []
         correct_predictions = 0
 
-        for data in tqdm(self.train_loader):
+        for data in self.train_loader:
             input_ids = data["input_ids"].to(self.device)
             attention_mask = data["attention_mask"].to(self.device)
             targets = data["targets"].to(self.device)
@@ -119,7 +120,7 @@ class BertClassifier:
         correct_predictions = 0
 
         with torch.no_grad():
-            for data in tqdm(self.valid_loader):
+            for data in self.valid_loader:
                 input_ids = data["input_ids"].to(self.device)
                 attention_mask = data["attention_mask"].to(self.device)
                 targets = data["targets"].to(self.device)
@@ -140,7 +141,11 @@ class BertClassifier:
 
     def train(self):
         best_accuracy = 0
-        for epoch in trange(self.epochs):
+        arr_train_loss = []
+        arr_train_acc = []
+        arr_val_loss = []
+        arr_val_acc = []
+        for epoch in range(self.epochs):
             print(f'Epoch {epoch + 1}/{self.epochs}')
             train_acc, train_loss = self.fit()
             print(f'Train loss {train_loss} accuracy {train_acc}')
@@ -149,9 +154,25 @@ class BertClassifier:
             print(f'Val loss {val_loss} accuracy {val_acc}')
             print('-' * 10)
 
+            arr_train_loss.append(train_loss)
+            arr_train_acc.append(train_acc)
+            arr_val_loss.append(val_loss)
+            arr_val_acc.append(val_acc)
+
             if val_acc > best_accuracy:
                 torch.save(self.model, self.model_save_path)
+                print('Save best model..')
                 best_accuracy = val_acc
+
+            plt.figure(figsize=(6, 4))
+            plt.plot(arr_train_acc, label='train_accuracy')
+            plt.plot(arr_val_acc, label='val_accuracy')
+            plt.plot(arr_train_loss, label='train_loss')
+            plt.plot(arr_val_loss, label='val_loss')
+            plt.title('rubert-tiny2-sentence-compression')
+            plt.legend()
+            plt.grid()
+            plt.show()
 
         self.model = torch.load(self.model_save_path)
 

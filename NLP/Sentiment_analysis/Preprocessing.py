@@ -22,8 +22,8 @@ print('device = ', device)
 source_root = 'source_root'
 filename = 'dataset.csv'
 destination_folder = 'outputs'
-train_test_ratio = 0.10
-train_valid_ratio = 0.80
+train_test_ratio = 0.15  # 0.9
+train_valid_ratio = 0.82  # 0.5
 first_n_words = 200
 
 
@@ -70,11 +70,6 @@ print(df)
 print(type(df.SentimentText))
 print(f'\nУникальных значений:\n{df.nunique()}')
 
-fig = plt.figure(figsize=(8,5))
-ax = sns.barplot(x=df.Sentiment.unique(), y=df.Sentiment.value_counts())
-ax.set(xlabel='Labels')
-plt.show()
-
 # Сохраним метки в виде списков
 reviews = df.SentimentText.values.tolist()
 labels = df.Sentiment.values.tolist()
@@ -92,26 +87,31 @@ df_new = pd.DataFrame(list(zip(reviews, labels)), columns=['text', 'label'])
 print(df_new)
 
 
-# Trim text and titletext to first_n_words
-# df_raw['SentimentText'] = df_raw['SentimentText'].apply(trim_string)
-# df_raw['titletext'] = df_raw['titletext'].apply(trim_string)
-
 # Split according to label
 df_pos = df_new[df_new['label'] == 1]
 df_neg = df_new[df_new['label'] == 0]
 
 # Train-test split
-df_pos_full_train, df_pos_test = train_test_split(df_pos, train_size=train_test_ratio, random_state=1)
-df_neg_full_train, df_neg_test = train_test_split(df_neg, train_size=train_test_ratio, random_state=1)
-
+df_pos_test, df_pos_temp = train_test_split(df_pos,
+                                                  train_size=train_test_ratio, random_state=42, shuffle=True)
+df_neg_test, df_neg_temp = train_test_split(df_neg,
+                                                  train_size=train_test_ratio, random_state=42, shuffle=True)
+print(f'\ndf_pos_temp:{df_pos_temp.shape}'
+      f'\ndf_pos_test:{df_pos_test.shape}')
 # Train-valid split
-df_pos_train, df_pos_valid = train_test_split(df_pos_full_train, train_size=train_valid_ratio, random_state=1)
-df_neg_train, df_neg_valid = train_test_split(df_neg_full_train, train_size=train_valid_ratio, random_state=1)
+df_pos_train, df_pos_valid = train_test_split(df_pos_temp,
+                                              train_size=train_valid_ratio, random_state=42, shuffle=True)
+df_neg_train, df_neg_valid = train_test_split(df_neg_temp,
+                                              train_size=train_valid_ratio, random_state=42, shuffle=True)
 
 # Concatenate splits of different labels
 df_train = pd.concat([df_pos_train, df_neg_train], ignore_index=True, sort=False)
 df_valid = pd.concat([df_pos_valid, df_neg_valid], ignore_index=True, sort=False)
 df_test = pd.concat([df_pos_test, df_neg_test], ignore_index=True, sort=False)
+print(f'\ndf_train: {df_train.shape}\t\tshare:{round(df_train.shape[0]/len(labels), 2)}'
+      f'\ndf_valid: {df_valid.shape}\t\tshare:{round(df_valid.shape[0]/len(labels), 2)}'
+      f'\ndf_test: {df_test.shape}\t\tshare:{round(df_test.shape[0]/len(labels), 2)}')
+
 
 # Write preprocessed data
 df_train.to_csv(destination_folder + '/train.csv', index=False)
