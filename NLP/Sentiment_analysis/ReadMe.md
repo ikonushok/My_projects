@@ -12,24 +12,19 @@ ___
 
 2. Model
 3. Helpers
-- DataLoader
 
-код:
+DataLoader:
 
     from torch.utils.data DataLoader
     train_set = CustomDataset(X_train, y_train, tokenizer)
     train_loader = DataLoader(train_set, batch_size=2, shuffle=True)
 
-- Optimizer
-
-код:
+Optimizer:
 
     from transformers import AdamW
     optimizer = AdamW(model.parameters(), lr=2e-5, correct_bias=False)
 
-- Scheduler
-
-код:
+Scheduler:
 
     from transformers import get_linear_schedule_with_warmup
     scheduler = get_linear_schedule_with_warmup(
@@ -38,12 +33,11 @@ ___
                     num_training_steps=len(train_loader) * epochs
                 )
 
-- Loss
- 
+Loss:
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
-5. Train
+4. Train
 
 Данные в цикле батчами генерируются с помощью DataLoader
 
@@ -71,7 +65,7 @@ ___
 - scheduler.step(): шаг планировщика; 
 - optimizer.zero_grad(): обнуляем градиенты.
 
-6. Inference
+5. Inference
 
 Для предсказания класса для нового текста используется метод predict, который имеет смысл вызывать только после обучения модели. Метод работает следующим образом:
 - Токенизируется входной текст; 
