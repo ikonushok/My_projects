@@ -40,7 +40,8 @@ ___
 
 - Loss
 
- 
+код:
+
     loss_fn = torch.nn.CrossEntropyLoss()
 
 5. Train
