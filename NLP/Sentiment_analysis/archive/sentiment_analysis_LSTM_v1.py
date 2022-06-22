@@ -8,6 +8,7 @@ import pandas as pd
 from string import punctuation
 
 import torch
+import seaborn as sns
 from matplotlib import pyplot as plt
 from torch.utils.data import TensorDataset, DataLoader
 
@@ -30,15 +31,21 @@ filename = 'dataset.csv'
 # df = pd.read_csv(data_root / 'Sentiment Analysis Dataset.csv', error_bad_lines=False)
 df = pd.read_csv(f'{source_root}/{filename}', delimiter=';')
 df = df[['Sentiment', 'SentimentText']]
-# df = df.query("Sentiment != 1")
+# Split according to label
+df1 = df[df['Sentiment'] == 1]
+df2 = df[df['Sentiment'] == 2]
+df = pd.concat([df1, df2], ignore_index=True, sort=False)
+# Drop rows with empty text
+df.drop(df[df.SentimentText.str.len() < 5].index, inplace=True)
+print(df.shape)
 print(df)
 print(type(df.SentimentText))
 print(f'\nУникальных значений:\n{df.nunique()}')
 
-# fig = plt.figure(figsize=(8,5))
-# ax = sns.barplot(x=df.Sentiment.unique(),y=df.Sentiment.value_counts());
-# ax.set(xlabel='Labels')
-# plt.show()
+fig = plt.figure(figsize=(8,5))
+ax = sns.barplot(x=df.Sentiment.unique(),y=df.Sentiment.value_counts());
+ax.set(xlabel='Labels')
+plt.show()
 
 # Сохраним метки в виде списков
 reviews = df.SentimentText.values.tolist()
@@ -78,12 +85,7 @@ print(f'{rewiew_lens[0]} - {max(rewiew_lens)}')
 plt.hist(rewiew_lens)
 plt.title('Распределение топиков по длине (число слов)')
 plt.show()
-print('Number of reviews before removing outliers:', len(reviews_ints))
-non_zero_idx = [ii for ii, review in enumerate(reviews_ints) if len(review) != 0]
-print(f'К удалению: {non_zero_idx[0]}')
-reviews_ints = [reviews[ii] for ii in non_zero_idx]
-encoded_labels = np.array([labels[ii] for ii in non_zero_idx])
-print('Number of reviews sater removing outliers:', len(reviews_ints))
+
 
 
 def pad_features(reviews_ints, seq_length):
@@ -101,7 +103,6 @@ features = pad_features(reviews_ints, seq_length=seq_lenght)
 assert len(features) == len(reviews_ints), 'Your features should have as many rows as reviews'
 assert len(features[0] == seq_lenght), 'Each feature row should contain seq_lenght values'
 print('\nПосмотрим на образцы закодированных топиков:')
-
 print(features, features.shape, len(features), reviews[0])
 
 
