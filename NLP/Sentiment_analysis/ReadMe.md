@@ -14,7 +14,7 @@ ___
 3. Helpers
 - DataLoader
 
- 
+код:
 
     from torch.utils.data DataLoader
     train_set = CustomDataset(X_train, y_train, tokenizer)
@@ -22,14 +22,14 @@ ___
 
 - Optimizer
 
- 
+код:
 
     from transformers import AdamW
     optimizer = AdamW(model.parameters(), lr=2e-5, correct_bias=False)
 
 - Scheduler
 
- 
+код:
 
     from transformers import get_linear_schedule_with_warmup
     scheduler = get_linear_schedule_with_warmup(
