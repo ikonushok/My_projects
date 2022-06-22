@@ -14,20 +14,22 @@ ___
 3. Helpers
 - DataLoader
 
+ 
 
     from torch.utils.data DataLoader
     train_set = CustomDataset(X_train, y_train, tokenizer)
     train_loader = DataLoader(train_set, batch_size=2, shuffle=True)
 
-
 - Optimizer
 
+ 
 
     from transformers import AdamW
     optimizer = AdamW(model.parameters(), lr=2e-5, correct_bias=False)
 
 - Scheduler
 
+ 
 
     from transformers import get_linear_schedule_with_warmup
     scheduler = get_linear_schedule_with_warmup(
@@ -38,7 +40,7 @@ ___
 
 - Loss
 
-
+ 
     loss_fn = torch.nn.CrossEntropyLoss()
 
 5. Train
