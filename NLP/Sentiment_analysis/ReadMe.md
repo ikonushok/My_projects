@@ -39,8 +39,7 @@ ___
                 )
 
 - Loss
-
-код:
+ 
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
