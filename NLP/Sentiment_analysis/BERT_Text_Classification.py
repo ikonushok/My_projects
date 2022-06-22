@@ -7,10 +7,10 @@ import warnings
 import numpy as np
 import pandas as pd
 import torch
-from matplotlib import pyplot as plt
 from sklearn.metrics import precision_recall_fscore_support
 
 from utilits.bert_classifier import BertClassifier
+from constants import first_n_words, source_root, lr, batch_size, epochs, destination_folder
 
 warnings.filterwarnings('ignore')
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -24,46 +24,58 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 
-train_data = pd.read_csv(f'outputs/train.csv')
-valid_data = pd.read_csv(f'outputs/valid.csv')
-test_data = pd.read_csv(f'outputs/test.csv')
+train_data = pd.read_csv(f'{source_root}/train.csv')
+valid_data = pd.read_csv(f'{source_root}/valid.csv')
+test_data = pd.read_csv(f'{source_root}/test.csv')
 
 
-# Initialize BERT classifier
-classifier = BertClassifier(
+model_path = ['rubert-tiny-toxicity', 'rubert-tiny2-sentence-compression', 'rubert-tiny']
+arr_precision, arr_recall, arr_f1score = [], [], []
+for modelname in model_path:
+        # Initialize BERT classifier
+        classifier = BertClassifier(
 
-        # model_path='cointegrated/rubert-tiny',
-        # tokenizer_path='cointegrated/rubert-tiny',
+                max_len=first_n_words,
+                n_classes=2,
+                lr=lr,
+                batch_size=batch_size,
+                epochs=epochs,
 
-        model_path='cointegrated/rubert-tiny2-sentence-compression',
-        tokenizer_path='cointegrated/rubert-tiny2-sentence-compression',
+                model_path=f'cointegrated/{modelname}',
+                tokenizer_path=f'cointegrated/{modelname}',
 
-        # model_path='cointegrated/rubert-tiny-toxicity',  # model fine-tuned for classification of toxicity and inappropriateness for short informal Russian texts, such as comments in social networks
-        # tokenizer_path='cointegrated/rubert-tiny-toxicity',
-
-        n_classes=2,
-        epochs=10,
-        model_save_path='models/bert.pt'
-)
-
-
-# Prepare data and helpers for train and evlauation
-classifier.preparation(
-        X_train=list(train_data['text']),
-        y_train=list(train_data['label']),
-        X_valid=list(valid_data['text']),
-        y_valid=list(valid_data['label'])
-    )
+                model_save_path='models/bert.pt'
+        )
 
 
-# Train
-classifier.train()
+        # Prepare data and helpers for train and evlauation
+        classifier.preparation(
+                X_train=list(train_data['text']),
+                y_train=list(train_data['label']),
+                X_valid=list(valid_data['text']),
+                y_valid=list(valid_data['label'])
+            )
 
 
-# Test
-texts = list(test_data['text'])
-labels = list(test_data['label'])
-predictions = [classifier.predict(t) for t in texts]
+        # Train
+        classifier.train(modelname)
 
-precision, recall, f1score = precision_recall_fscore_support(labels, predictions,average='macro')[:3]
-print(f'precision: {precision}, recall: {recall}, f1score: {f1score}')
+
+        # Test
+        texts = list(test_data['text'])
+        labels = list(test_data['label'])
+        predictions = [classifier.predict(t) for t in texts]
+
+        precision, recall, f1score = precision_recall_fscore_support(labels, predictions,average='macro')[:3]
+        arr_precision.append(precision)
+        arr_recall.append(recall)
+        arr_f1score.append(f1score)
+        print(f'precision: {precision}, recall: {recall}, f1score: {f1score}')
+
+
+# Сохраним статистику в файл
+df_test_metrics = pd.DataFrame(list(zip(model_path, arr_precision, arr_recall, arr_f1score)),
+                               columns=['model', 'precision', 'arr_recall', 'f1score'])
+df_test_metrics = df_test_metrics.set_index('model')
+print(df_test_metrics)
+df_test_metrics.to_excel(f'{destination_folder}/test_metrics.xlsx')

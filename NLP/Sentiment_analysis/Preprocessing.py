@@ -10,6 +10,8 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 
+from constants import first_n_words, source_root
+
 warnings.filterwarnings('ignore')
 pd.pandas.set_option('display.max_columns', None)
 pd.set_option("expand_frame_repr", False)
@@ -17,14 +19,12 @@ pd.set_option("precision", 2)
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print('device = ', device)
 
-
 # Parameters
-source_root = 'source_root'
 filename = 'dataset.csv'
-destination_folder = 'outputs'
+
 train_test_ratio = 0.15  # 0.9
 train_valid_ratio = 0.82  # 0.5
-first_n_words = 200
+
 
 
 # Preprocessing
@@ -114,6 +114,6 @@ print(f'\ndf_train: {df_train.shape}\t\tshare:{round(df_train.shape[0]/len(label
 
 
 # Write preprocessed data
-df_train.to_csv(destination_folder + '/train.csv', index=False)
-df_valid.to_csv(destination_folder + '/valid.csv', index=False)
-df_test.to_csv(destination_folder + '/test.csv', index=False)
+df_train.to_csv(source_root + '/train.csv', index=False)
+df_valid.to_csv(source_root + '/valid.csv', index=False)
+df_test.to_csv(source_root + '/test.csv', index=False)
