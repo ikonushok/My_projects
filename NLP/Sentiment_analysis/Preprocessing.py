@@ -22,8 +22,8 @@ print('device = ', device)
 # Parameters
 filename = 'dataset.csv'
 
-train_test_ratio = 0.15  # 0.9
-train_valid_ratio = 0.82  # 0.5
+train_test_ratio = 0.2  # 0.9
+train_valid_ratio = 0.75  # 0.5
 
 
 
