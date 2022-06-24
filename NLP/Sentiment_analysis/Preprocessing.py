@@ -40,17 +40,19 @@ def trim_string(x):
 df = pd.read_csv(f'{source_root}/{filename}', delimiter=';')
 df = df[['Sentiment', 'SentimentText']]
 df.dropna(inplace=True)
+
+fig = plt.figure(figsize=(8, 5))
+ax = sns.barplot(x=df.Sentiment.unique(), y=df.Sentiment.value_counts())
+ax.set(xlabel='Labels')
+plt.title('Распределение классов')
+plt.show()
+
 # Split according to label
 df1 = df[df['Sentiment'] == 1]
 df2 = df[df['Sentiment'] == 2]
 df2['Sentiment'] = 0
 df = pd.concat([df1, df2], ignore_index=True, sort=False)
 print(df)
-
-# Prepare columns
-# df_raw['Sentiment'] = (df_raw['Sentiment'] == 'FAKE').astype('int')
-# df_raw['titletext'] = df_raw['title'] + ". " + df_raw['text']
-# df_raw = df_raw.reindex(columns=['label', 'title', 'text', 'titletext'])
 
 # Drop rows with empty text
 df.drop(df[df.SentimentText.str.len() < 5].index, inplace=True)
