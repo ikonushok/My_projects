@@ -14,6 +14,8 @@ from constants import first_n_words, source_root, lr, batch_size, epochs, destin
 
 warnings.filterwarnings('ignore')
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# torch.device('cpu')
+# device = torch.device('cpu')
 print('device = ', device)
 
 os.environ['PYTHONHASHSEED'] = str(42)
@@ -23,8 +25,7 @@ torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-os.mkdir('outputs')
-
+# os.mkdir('outputs')
 
 train_data = pd.read_csv(f'{source_root}/train.csv')
 valid_data = pd.read_csv(f'{source_root}/valid.csv')
@@ -49,7 +50,6 @@ for modelname in model_path:
                 model_save_path='models/bert.pt'
         )
 
-
         # Prepare data and helpers for train and evlauation
         classifier.preparation(
                 X_train=list(train_data['text']),
@@ -58,10 +58,8 @@ for modelname in model_path:
                 y_valid=list(valid_data['label'])
             )
 
-
         # Train
         classifier.train(modelname)
-
 
         # Test
         texts = list(test_data['text'])
@@ -72,12 +70,12 @@ for modelname in model_path:
         arr_precision.append(precision)
         arr_recall.append(recall)
         arr_f1score.append(f1score)
-        print(f'precision: {precision}, recall: {recall}, f1score: {f1score}')
+        print(f'\nprecision: {precision}, recall: {recall}, f1score: {f1score}')
 
 
 # Сохраним статистику в файл
 df_test_metrics = pd.DataFrame(list(zip(model_path, arr_precision, arr_recall, arr_f1score)),
                                columns=['model', 'precision', 'arr_recall', 'f1score'])
 df_test_metrics = df_test_metrics.set_index('model')
-print(df_test_metrics)
+print(f'\n{df_test_metrics}')
 df_test_metrics.to_excel(f'{destination_folder}/test_metrics.xlsx')

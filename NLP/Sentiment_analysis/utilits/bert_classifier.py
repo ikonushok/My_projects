@@ -157,26 +157,27 @@ class BertClassifier():
             print(f'Val loss {val_loss} accuracy {val_acc}')
 
             arr_train_loss.append(train_loss)
-            arr_train_acc.append(train_acc)
+            arr_train_acc.append(train_acc.cpu())
             arr_val_loss.append(val_loss)
-            arr_val_acc.append(val_acc)
+            arr_val_acc.append(val_acc.cpu())
 
             if val_acc > best_accuracy:
                 torch.save(self.model, self.model_save_path)
                 print('Save best model..')
                 best_accuracy = val_acc
 
-            plt.figure(figsize=(6, 4))
-            plt.plot(arr_train_acc, label='train_accuracy')
-            plt.plot(arr_val_acc, label='val_accuracy')
-            plt.plot(arr_train_loss, label='train_CrossEntropyLoss')
-            plt.plot(arr_val_loss, label='val_CrossEntropyLoss')
-            plt.legend()
-            plt.grid()
-            plt.title(f'history_{modelname}:\n'
-                      f'for {epoch+1} epochs  (first_n_words={first_n_words}, lr={lr}, batch_size={batch_size})')
-            plt.savefig(f'outputs/{modelname}.png')
-            plt.show()
+            if epoch == self.epochs - 1:
+                plt.figure(figsize=(6, 4))
+                plt.plot(arr_train_acc, label='train_accuracy')
+                plt.plot(arr_val_acc, label='val_accuracy')
+                plt.plot(arr_train_loss, label='train_CrossEntropyLoss')
+                plt.plot(arr_val_loss, label='val_CrossEntropyLoss')
+                plt.legend()
+                plt.grid()
+                plt.title(f'history_{modelname}:\n'
+                          f'for {epoch+1} epochs  (first_n_words={first_n_words}, lr={lr}, batch_size={batch_size})')
+                plt.savefig(f'outputs/{modelname}.png')
+                plt.show()
 
             # Сохраним статистику в файл
             df_test_metrics = pd.DataFrame(
