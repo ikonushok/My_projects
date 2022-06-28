@@ -128,10 +128,10 @@ def create_hard_batch(network, x_train, y_train, x_test, y_test, x_train_w_h, ba
 ### Create the Triplet Loss Function
 """
 def triplet_loss(y, emb_size, alpha=0.2):
-    print(y.shape)
-    print(emb_size)
+    # print(y.shape)
+    # print(emb_size)
     anchor, positive, negative = y[:,:emb_size], y[:,emb_size:2*emb_size], y[:,2*emb_size:]
-    print(anchor, positive, negative)
+    # print(anchor, positive, negative)
     positive_dist = tf.reduce_mean(tf.square(anchor - positive), axis=1)
     negative_dist = tf.reduce_mean(tf.square(anchor - negative), axis=1)
     return tf.maximum(positive_dist - negative_dist + alpha, 0.)

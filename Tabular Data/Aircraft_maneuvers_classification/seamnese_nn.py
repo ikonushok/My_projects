@@ -8,23 +8,22 @@ import random
 import matplotlib.pylab as plt
 from sklearn.decomposition import PCA
 
-
 import tensorflow as tf
 from keras.callbacks import CSVLogger, ModelCheckpoint
 from keras.optimizers import Adam
-
 
 from utilits.model_dense import create_embedding_model, create_SNN
 from utilits.functions_for_seamnese_nn import (plot_triplets, create_batch, create_hard_batch, evaluate,
     data_generator, generate_prototypes, n_way_accuracy_prototypes, visualise_n_way_prototypes)
 
 warnings.filterwarnings('ignore')
+tf.config.run_functions_eagerly(True)
 
 # сделаем так, чтобы tf не резервировал под себя сразу всю память
 # https://stackoverflow.com/questions/34199233/how-to-prevent-tensorflow-from-allocating-the-totality-of-a-gpu-memory
 gpus = tf.config.experimental.list_physical_devices('GPU')
 for gpu in gpus:
-  tf.config.experimental.set_memory_growth(gpu, True)
+    tf.config.experimental.set_memory_growth(gpu, True)
 
 # фиксируем сиды
 # https://coderoad.ru/51249811/Воспроизводимые-результаты-в-Tensorflow-с-tf-set_random_seed
@@ -45,10 +44,10 @@ The data loaded in must be in the same format as tf.keras.datasets.mnist.load_da
 that is (x_train, y_train), (x_test, y_test)
 """
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-x_train = x_train[:500]
-y_train = y_train[:500]
-x_test = x_test[:500]
-y_test = y_test[:500]
+x_train = x_train[:1000]
+y_train = y_train[:1000]
+x_test = x_test[:1000]
+y_test = y_test[:1000]
 num_classes = len(np.unique(y_train))
 
 x_train_w = x_train.shape[1]  # (60000, 28, 28)
@@ -158,7 +157,7 @@ history = snn.fit(
     data_generator(network, x_train, y_train, x_test, y_test, x_train_w_h,
                    emb_size, batch_size=batch_per_gpu, num_hard=num_hard),
     steps_per_epoch=steps_per_epoch,
-    epochs=epochs, verbose=0, workers=1,
+    epochs=epochs, verbose=0,
     callbacks=callbacks,
     validation_data=data_generator(network, x_train, y_train, x_test, y_test, x_train_w_h,
                                    emb_size, batch_size=batch_per_gpu, num_hard=num_hard, split="test"),
