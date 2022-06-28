@@ -3,9 +3,9 @@ import random
 import numpy as np
 
 import tensorflow as tf
-from tensorflow.keras.layers import Layer, BatchNormalization, MaxPooling2D, Concatenate, Lambda, Flatten, Dense
-from tensorflow.keras.initializers import glorot_uniform, he_uniform
-from tensorflow.keras.regularizers import l2
+from keras.layers import Layer, BatchNormalization, MaxPooling2D, Concatenate, Lambda, Flatten, Dense
+# from keras.initializers import glorot_uniform, he_uniform
+from keras.regularizers import l2
 
 # сделаем так, чтобы tf не резервировал под себя сразу всю память
 # https://stackoverflow.com/questions/34199233/how-to-prevent-tensorflow-from-allocating-the-totality-of-a-gpu-memory
@@ -43,7 +43,7 @@ def create_embedding_model(emb_size, x_train_w_h):
               kernel_initializer='he_uniform')
     ])
 
-    embedding_model.summary()
+    # embedding_model.summary()
 
     return embedding_model
 
@@ -67,6 +67,6 @@ def create_SNN(network, x_train_w_h):
 
     siamese_net = tf.keras.models.Model([input_anchor, input_positive, input_negative],
                                         output)
-    siamese_net.summary()
+    # siamese_net.summary()
 
     return siamese_net

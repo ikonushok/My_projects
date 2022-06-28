@@ -8,11 +8,12 @@ import random
 import matplotlib.pylab as plt
 from sklearn.decomposition import PCA
 
-import tensorflow as tf
-from tensorflow.keras.callbacks import CSVLogger, ModelCheckpoint
-from tensorflow.keras.optimizers import Adam
 
-from constants import path_outputs
+import tensorflow as tf
+from keras.callbacks import CSVLogger, ModelCheckpoint
+from keras.optimizers import Adam
+
+
 from utilits.model_dense import create_embedding_model, create_SNN
 from utilits.functions_for_seamnese_nn import (plot_triplets, create_batch, create_hard_batch, evaluate,
     data_generator, generate_prototypes, n_way_accuracy_prototypes, visualise_n_way_prototypes)
@@ -44,10 +45,10 @@ The data loaded in must be in the same format as tf.keras.datasets.mnist.load_da
 that is (x_train, y_train), (x_test, y_test)
 """
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-x_train = x_train[:5000]
-y_train = y_train[:5000]
-x_test = x_test[:5000]
-y_test = y_test[:5000]
+x_train = x_train[:500]
+y_train = y_train[:500]
+x_test = x_test[:500]
+y_test = y_test[:500]
 num_classes = len(np.unique(y_train))
 
 x_train_w = x_train.shape[1]  # (60000, 28, 28)
@@ -136,7 +137,7 @@ print(f"Starting training process!\n{'-' * 90}")
 
 # Only save the best model weights based on the val_loss
 checkpoint = ModelCheckpoint(os.path.join(logdir, 'snn_model.h5'),#'snn_model-{epoch:02d}-{val_loss:.2f}.h5'),
-                             monitor='val_loss', verbose=1,
+                             monitor='val_loss', verbose=0,
                              save_best_only=True,
                              # save_weights_only=True,
                              mode='auto')
@@ -151,13 +152,13 @@ num_gpus = 1
 snn = siamese_net
 batch_per_gpu = int(batch_size / num_gpus)
 
-snn.compile(loss=triplet_loss, optimizer=optimiser_obj)
+snn.compile(loss=triplet_loss, optimizer=optimiser_obj, run_eagerly=True)
 
 history = snn.fit(
     data_generator(network, x_train, y_train, x_test, y_test, x_train_w_h,
                    emb_size, batch_size=batch_per_gpu, num_hard=num_hard),
     steps_per_epoch=steps_per_epoch,
-    epochs=epochs, verbose=1, workers=1,
+    epochs=epochs, verbose=0, workers=1,
     callbacks=callbacks,
     validation_data=data_generator(network, x_train, y_train, x_test, y_test, x_train_w_h,
                                    emb_size, batch_size=batch_per_gpu, num_hard=num_hard, split="test"),

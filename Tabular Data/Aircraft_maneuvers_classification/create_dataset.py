@@ -12,7 +12,7 @@ from utilits.create_dataset_functions import make_transformations, split_sequenc
 warnings.filterwarnings("ignore")
 pd.pandas.set_option('display.max_columns', None)
 pd.set_option("expand_frame_repr", False)
-pd.set_option("precision", 2)
+# pd.set_option("precision", 2)
 
 source_file = 'IMU_2022_05_14_18_13_42.csv'
 df = pd.read_csv(f'{source_root}/{source_file}')

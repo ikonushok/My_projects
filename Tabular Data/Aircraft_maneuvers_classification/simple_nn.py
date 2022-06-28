@@ -7,17 +7,17 @@ from matplotlib import pyplot as plt
 
 import tensorflow as tf
 import tensorflow_addons as tfa
-from tensorflow.keras.models import Sequential, Model, load_model
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
-from tensorflow.keras.layers import (Input, Dense, Dropout, BatchNormalization, Flatten,
-                                     Conv1D, MaxPooling1D, RepeatVector)
+from keras.models import Sequential, Model, load_model
+from keras.optimizers import Adam
+from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from keras.layers import (Input, Dense, Dropout, BatchNormalization, Flatten,
+                          Conv1D, MaxPooling1D, RepeatVector)
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from tqdm import trange
 
-from constants import source_root, path_outputs
+from constants import source_root, path_outputs, patch, batch_size
 from utilits.create_dataset_functions import read_data
 
 
@@ -36,10 +36,6 @@ for gpu in gpus:
 
 
 
-# parameters
-patch = 30
-batch_size = 256
-
 # скачаем сбалансированный датасет
 arr_x, arr_y = read_data(source_root, patch=patch)
 arr_y = arr_y - 1  # тк у нас нумерация классов начинается с 0
@@ -54,7 +50,7 @@ x_train = scaled_x.reshape(arr_x.shape[0], arr_x.shape[1], arr_x.shape[2])
 print(f'Data after scaling:\n{x_train[0][0]}\n')
 
 # превожу в to_categorical
-from tensorflow.keras.utils import to_categorical
+from keras.utils import to_categorical
 categorical_labels = to_categorical(arr_y, num_classes=num_classes)
 print(f'Образец категориального Y:\t{categorical_labels[0]}\n')
 
@@ -113,7 +109,7 @@ plt.plot(history.history['val_categorical_accuracy'], label='val_categorical_acc
 plt.plot(history.history['val_auc'], label='val_auc')
 # plt.plot(history.history['loss'], label='loss')
 # plt.plot(history.history['val_loss'], label='val_loss')
-plt.title(f'Параметры обучения модели для:\npatch = {patch},  batch_size = { batch_size}\ncyclical_learning_rate')
+plt.title(f'Параметры обучения модели для:\npatch = {patch},  batch_size = { batch_size}, cyclical_learning_rate')
 plt.legend()
 plt.grid()
 plt.savefig(f'{path_outputs}/history_bs_{batch_size}_patch_{patch}_clr.png')
@@ -126,7 +122,7 @@ print('Validation accuracy achieved:', (history.history['val_categorical_accurac
 # Распознавания всех тестовых вариантов и вывода класса
 arr_test = []
 true = 0
-for i in trange(x_test.shape[0], desc='Проверяем модель для тестовой выборки...'):
+for i in range(x_test.shape[0]):
     x = x_test[i]
     x = np.expand_dims(x, axis=0)
     prediction = model.predict(x)  # Распознаём наш пример

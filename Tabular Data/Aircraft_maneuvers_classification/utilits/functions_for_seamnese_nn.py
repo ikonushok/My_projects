@@ -13,7 +13,8 @@ from sklearn.metrics import roc_curve, roc_auc_score
 
 # фиксируем сиды
 # https://coderoad.ru/51249811/Воспроизводимые-результаты-в-Tensorflow-с-tf-set_random_seed
-from Aircraft_maneuvers_classification.constants import path_outputs
+path_outputs = 'outputs'
+source_root = 'source_root'
 
 seed = 42
 os.environ['PYTHONHASHSEED'] = str(seed)
@@ -80,12 +81,12 @@ def create_hard_batch(network, x_train, y_train, x_test, y_test, x_train_w_h, ba
     x_positives = np.zeros((batch_size, x_train_w_h))
     x_negatives = np.zeros((batch_size, x_train_w_h))
 
-    if split == "train":
-        data = x_train
-        data_y = y_train
-    else:
-        data = x_test
-        data_y = y_test
+    # if split == "train":
+    #     data = x_train
+    #     data_y = y_train
+    # else:
+    #     data = x_test
+    #     data_y = y_test
 
     # Generate num_hard number of hard examples:
     hard_batches = []

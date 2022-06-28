@@ -1,3 +1,5 @@
+
+patch = 30
 batch_size = 256*4
 epochs = 150
 alpha = 0.2
